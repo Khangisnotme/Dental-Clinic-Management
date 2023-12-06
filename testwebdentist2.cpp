@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>  // Add the necessary header for file input/output operations
+
 
 // Base class for all members
 class Member {
@@ -122,36 +124,6 @@ bool validatePassword(const std::string& password) {
     return true;
 }
 
-// Function to create a new account
-void createAccount(std::vector<Member*>& members) {
-    std::string username, password, fullName, email, phoneNumber;
-    int yearOfBirth;
-    std::cout << "Enter username: ";
-    std::cin >> username;
-    std::cout << "Enter password: ";
-    std::cin >> password;
-    std::cout << "Enter full name: ";
-    std::cin.ignore();
-    std::getline(std::cin, fullName);
-    std::cout << "Enter email: ";
-    std::cin >> email;
-    std::cout << "Enter phone number: ";
-    std::cin >> phoneNumber;
-    std::cout << "Enter year of birth: ";
-    std::cin >> yearOfBirth;
-
-    // Validate password
-    if (!validatePassword(password)) {
-        std::cout << "Invalid password! Password must not start with a special character and must have at least 6 characters." << std::endl;
-        return;
-    }
-
-    // Create a new patient account
-    Patient* patient = new Patient(username, password, fullName, email, phoneNumber, yearOfBirth, "", "", "", "");
-    members.push_back(patient);
-
-    std::cout << "Account created successfully!" << std::endl;
-}
 
 // Function to log in
 Member* login(const std::vector<Member*>& members) {
@@ -172,9 +144,86 @@ Member* login(const std::vector<Member*>& members) {
     return nullptr;
 }
 
+// Modify the createAccount function to return the new account
+Member* createAccount(std::vector<Member*>& members) {
+    std::string username, password, fullName, email, phoneNumber;
+    int yearOfBirth;
+    std::cout << "Enter username: ";
+    std::cin >> username;
+    std::cout << "Enter password: ";
+    std::cin >> password;
+    std::cout << "Enter full name: ";
+    std::cin.ignore();
+    std::getline(std::cin, fullName);
+    std::cout << "Enter email: ";
+    std::cin >> email;
+    std::cout << "Enter phone number: ";
+    std::cin >> phoneNumber;
+    std::cout << "Enter year of birth: ";
+    std::cin >> yearOfBirth;
+
+    // Validate password
+    if (!validatePassword(password)) {
+        std::cout << "Invalid password! Password must not start with a special character and must have at least 6 characters." << std::endl;
+        return nullptr;
+    }
+
+    // Create a new patient account
+    Patient* patient = new Patient(username, password, fullName, email, phoneNumber, yearOfBirth, "", "", "", "");
+    members.push_back(patient);
+
+    // Save the new account to a file
+    std::ofstream file("accounts.txt", std::ios::app);  // Open the file in append mode
+    if (file.is_open()) {
+        file << username << " " << password << " " << fullName << " " << email << " " << phoneNumber << " " << yearOfBirth << std::endl;
+        file.close();
+    } else {
+        std::cout << "Failed to save account to file!" << std::endl;
+    }
+
+    std::cout << "Account created successfully!" << std::endl;
+
+    // Return the new account
+    return patient;
+}
+/*void loadAccounts(std::vector<Member*>& members) {
+    std::ifstream file("accounts.txt");
+    if (file.is_open()) {
+        std::string username, password, fullName, email, phoneNumber;
+        int yearOfBirth;
+        while (file >> username >> password >> fullName >> email >> phoneNumber >> yearOfBirth) {
+            // Create a new patient account
+            Patient* patient = new Patient(username, password, fullName, email, phoneNumber, yearOfBirth, "", "", "", "");
+            members.push_back(patient);
+        }
+        file.close();
+    } else {
+        std::cout << "No existing accounts found. Please create a new account." << std::endl;
+    }
+}*/
+void loadAccounts(std::vector<Member*>& members) {
+    std::ifstream inputFile("accounts.txt"); // Thay "accounts.txt" bằng đường dẫn và tên file của bạn
+
+    if (inputFile.is_open()) {
+        std::string line;
+        while (std::getline(inputFile, line)) {
+            // Trích xuất thông tin từng dòng
+            // Tạo đối tượng Member tương ứng và thêm vào vector members
+        }
+
+        inputFile.close();
+    }
+    else {
+        std::cout << "Failed to open accounts file." << std::endl;
+    }
+}
+
+
 int main() {
     std::vector<Member*> members;
     std::vector<AppointmentSlip> appointmentSlips;
+     // Load accounts from file
+    loadAccounts(members);
 
     // Create some initial members and appointment slips
     Patient patient("patient1", "password1", "John Doe", "john.doe@example.com", "123456789", 1990, "1234567890", "123 Main St", "Engineer", "New York");
@@ -211,7 +260,13 @@ int main() {
         }
         break;
     case 2:
-        createAccount(members);
+        // Automatically log in with the new account
+        loggedInMember = createAccount(members);
+        if (loggedInMember != nullptr) {
+            // Logged in successfully
+            std::cout << "Logged in as: " << loggedInMember->getUsername() << std::endl;
+            // Add code for the user interface after logging in
+        }
         break;
     default:
         std::cout << "Invalid choice!" << std::endl;
@@ -219,4 +274,3 @@ int main() {
 
     return 0;
 }
-
