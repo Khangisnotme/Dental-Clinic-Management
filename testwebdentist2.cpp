@@ -125,23 +125,21 @@ bool validatePassword(const std::string& password) {
 }
 
 
-// Function to log in
-Member* login(const std::vector<Member*>& members) {
-    std::string username, password;
-    std::cout << "Enter username: ";
-    std::cin >> username;
-    std::cout << "Enter password: ";
-    std::cin >> password;
-
-    // Find the member with the given username and password
+Member* login(const std::string& username, const std::string& password, const std::vector<Member*>& members) {
     for (const auto& member : members) {
         if (member->getUsername() == username && member->getPassword() == password) {
             return member;
         }
     }
-
-    std::cout << "Invalid username or password!" << std::endl;
     return nullptr;
+}
+
+void saveAccount(const std::string& username, const std::string& password) {
+    std::ofstream file("khoacc.txt", std::ios::app);
+    if (file.is_open()) {
+        file << username << " " << password << "\n";
+        file.close();
+    }
 }
 
 // Modify the createAccount function to return the new account
@@ -173,36 +171,18 @@ Member* createAccount(std::vector<Member*>& members) {
     members.push_back(patient);
 
     // Save the new account to a file
-    std::ofstream file("accounts.txt", std::ios::app);  // Open the file in append mode
-    if (file.is_open()) {
-        file << username << " " << password << " " << fullName << " " << email << " " << phoneNumber << " " << yearOfBirth << std::endl;
-        file.close();
-    } else {
-        std::cout << "Failed to save account to file!" << std::endl;
-    }
+   
+    saveAccount(username, password);  // Utilize the existing saveAccount function
+    
 
     std::cout << "Account created successfully!" << std::endl;
 
     // Return the new account
     return patient;
 }
-/*void loadAccounts(std::vector<Member*>& members) {
-    std::ifstream file("accounts.txt");
-    if (file.is_open()) {
-        std::string username, password, fullName, email, phoneNumber;
-        int yearOfBirth;
-        while (file >> username >> password >> fullName >> email >> phoneNumber >> yearOfBirth) {
-            // Create a new patient account
-            Patient* patient = new Patient(username, password, fullName, email, phoneNumber, yearOfBirth, "", "", "", "");
-            members.push_back(patient);
-        }
-        file.close();
-    } else {
-        std::cout << "No existing accounts found. Please create a new account." << std::endl;
-    }
-}*/
+
 void loadAccounts(std::vector<Member*>& members) {
-    std::ifstream inputFile("accounts.txt"); // Thay "accounts.txt" bằng đường dẫn và tên file của bạn
+    std::ifstream inputFile("khoacc.txt"); 
 
     if (inputFile.is_open()) {
         std::string line;
@@ -251,14 +231,23 @@ int main() {
     Member* loggedInMember = nullptr;
 
     switch (choice) {
-    case 1:
-        loggedInMember = login(members);
+    case 1: {
+        std::string username, password;
+        std::cout << "Enter username: ";
+        std::cin >> username;
+        std::cout << "Enter password: ";
+        std::cin >> password;
+
+        loggedInMember = login(username, password, members);
         if (loggedInMember != nullptr) {
             // Logged in successfully
             std::cout << "Logged in as: " << loggedInMember->getUsername() << std::endl;
             // Add code for the user interface after logging in
+        } else {
+            std::cout << "Invalid username or password!" << std::endl;
         }
         break;
+    }
     case 2:
         // Automatically log in with the new account
         loggedInMember = createAccount(members);
@@ -270,7 +259,7 @@ int main() {
         break;
     default:
         std::cout << "Invalid choice!" << std::endl;
-    }
+}
 
     return 0;
 }
