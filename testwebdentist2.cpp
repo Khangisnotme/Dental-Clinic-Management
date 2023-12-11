@@ -202,28 +202,30 @@ void loadAccounts(std::vector<Member*>& members) {
 int main() {
     std::vector<Member*> members;
     std::vector<AppointmentSlip> appointmentSlips;
-     // Load accounts from file
+    // Load accounts from file
     loadAccounts(members);
 
     // Create some initial members and appointment slips
-    Patient patient("patient1", "password1", "John Doe", "john.doe@example.com", "123456789", 1990, "1234567890", "123 Main St", "Engineer", "New York");
-    Dentist dentist("dentist1", "password2", "Dr. Jane Smith", "jane.smith@example.com", "987654321", 1985, "Orthodontics", "Senior Dentist", "DDS", "ABC Dental Clinic");
-    Admin admin("admin1", "password3", "Admin User", "admin@example.com", "555555555", 1975, "Level 1");
-
-    members.push_back(&patient);
-    members.push_back(&dentist);
+    Admin admin("admin1", "password1", "Admin User", "admin@example.com", "555555555", 1975, "Level 1");
     members.push_back(&admin);
+
+    Patient patient("patient1", "password2", "John Doe", "john.doe@example.com", "123456789", 1990, "1234567890", "123 Main St", "Engineer", "New York");
+    members.push_back(&patient);
+
+    Dentist dentist("dentist1", "password3", "Dr. Jane Smith", "jane.smith@example.com", "987654321", 1985, "Orthodontics", "Senior Dentist", "DDS", "ABC Dental Clinic");
+    members.push_back(&dentist);
 
     AppointmentSlip appointment1("A001", "2023-01-01", "2023-01-10", "10:00", "001", "Regular check-up", "Scheduled", "D001", "P001", "Dentist");
     AppointmentSlip appointment2("A002", "2023-01-02", "2023-01-15", "14:30", "002", "Tooth extraction", "Scheduled", "D002", "P002", "Patient");
-
     appointmentSlips.push_back(appointment1);
     appointmentSlips.push_back(appointment2);
 
     // User interface
     std::cout << "Welcome to the Dental Clinic Management System!" << std::endl;
-    std::cout << "1. Log in" << std::endl;
-    std::cout << "2. Create a new account" << std::endl;
+    std::cout << "0. Exit" << std::endl;
+    std::cout << "1. Admin" << std::endl;
+    std::cout << "2. Patient" << std::endl;
+    std::cout << "3. Dentist" << std::endl;
     std::cout << "Enter your choice: ";
     int choice;
     std::cin >> choice;
@@ -231,35 +233,63 @@ int main() {
     Member* loggedInMember = nullptr;
 
     switch (choice) {
-    case 1: {
-        std::string username, password;
-        std::cout << "Enter username: ";
-        std::cin >> username;
-        std::cout << "Enter password: ";
-        std::cin >> password;
+        case 0:
+            // Exit the program
+            return 0;
+        case 1: {
+            std::string username, password;
+            std::cout << "Enter admin username: ";
+            std::cin >> username;
+            std::cout << "Enter admin password: ";
+            std::cin >> password;
 
-        loggedInMember = login(username, password, members);
-        if (loggedInMember != nullptr) {
-            // Logged in successfully
-            std::cout << "Logged in as: " << loggedInMember->getUsername() << std::endl;
-            // Add code for the user interface after logging in
-        } else {
-            std::cout << "Invalid username or password!" << std::endl;
+            // Check if the entered username and password match the admin account
+            if (username == admin.getUsername() && password == admin.getPassword()) {
+                loggedInMember = &admin;
+                std::cout << "Logged in as admin: " << loggedInMember->getUsername() << std::endl;
+                // Add code for the admin user interface
+            } else {
+                std::cout << "Invalid admin username or password!" << std::endl;
+            }
+            break;
         }
-        break;
+        case 2: {
+            std::string username, password;
+            std::cout << "Enter patient username: ";
+            std::cin >> username;
+            std::cout << "Enter patient password: ";
+            std::cin >> password;
+
+            // Check if the entered username and password match a patient account
+            loggedInMember = login(username, password, members);
+            if (loggedInMember != nullptr && dynamic_cast<Patient*>(loggedInMember) != nullptr) {
+                std::cout << "Logged in as patient: " << loggedInMember->getUsername() << std::endl;
+                // Add code for the patient user interface
+            } else {
+                std::cout << "Invalid patient username or password!" << std::endl;
+            }
+            break;
+        }
+        case 3: {
+            std::string username, password;
+            std::cout << "Enter dentist username: ";
+            std::cin >> username;
+            std::cout << "Enter dentist password: ";
+            std::cin >> password;
+
+            // Check if the entered username and password match a dentist account
+            loggedInMember = login(username, password, members);
+            if (loggedInMember != nullptr && dynamic_cast<Dentist*>(loggedInMember) != nullptr) {
+                std::cout << "Logged in as dentist: " << loggedInMember->getUsername() << std::endl;
+                // Add code for the dentist user interface
+            } else {
+                std::cout << "Invalid dentist username or password!" << std::endl;
+            }
+            break;
+        }
+        default:
+            std::cout << "Invalid choice!" << std::endl;
     }
-    case 2:
-        // Automatically log in with the new account
-        loggedInMember = createAccount(members);
-        if (loggedInMember != nullptr) {
-            // Logged in successfully
-            std::cout << "Logged in as: " << loggedInMember->getUsername() << std::endl;
-            // Add code for the user interface after logging in
-        }
-        break;
-    default:
-        std::cout << "Invalid choice!" << std::endl;
-}
 
     return 0;
 }
