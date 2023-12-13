@@ -1409,20 +1409,20 @@ void docDanhSachTuFILE(DouList* l, const string& fileName) {
 //HÀM IN THÔNG BÁO
 void inThongBao() {
     cout << "--------------------------------------------------------------------------------" << endl;
-    cout << "                BANG QUAN LY DANH SACH DAT HANG TRUC TUYEN" << endl;
+    cout << "                HỆ THỐNG QUẢN LÝ PHÒNG KHÁM NHA KHOA KHANG PS" << endl;
     cout << "--------------------------------------------------------------------------------" << endl;
 
     cout << "Menu:" << endl;
-    cout << "a) Nhap danh sach" << endl;
-    cout << "b) In danh sach" << endl;
-    cout << "c) Tim kiem mot khach hang theo ho ten" << endl;
-    cout << "d) Chen them mot khach hang moi vao sau mot khach hang co ma so chi dinh" << endl;
-    cout << "e) Xoa mot khach hang co ma so chi dinh" << endl;
-    cout << "f) Sap xep danh sach theo ma so tang dan" << endl;
-    cout << "g) Sap xep danh sach theo ten tang dan" << endl;
-    cout << "h) Sua don hang" << endl;
-    cout << "i) In hoa don" << endl;
-    cout << "j) Thoat" << endl;
-    cout << "k) Doc danh sach tu file" << endl;
+    cout << "a) Đặt lịch hẹn cho khách hàng" << endl;
+    cout << "b) In lịch hẹn" << endl;
+    cout << "c) Tìm kiếm một khách hàng theo họ tên" << endl;
+    cout << "d) Chèn thêm một khách hàng mới vào sau một khách hàng có mã số chỉ định" << endl;
+    cout << "e) Xóa một khách hàng có mã số chỉ định" << endl;
+    cout << "f) Sắp xếp danh sách theo mã số tăng dần" << endl;
+    cout << "g) Sắp xếp danh sách theo tên tăng dần " << endl;
+    cout << "h) Sửa lịch hẹn" << endl;
+    cout << "i) In hóa đơn" << endl;
+    cout << "j) Thoát" << endl;
+    cout << "k) Đọc danh sách từ file" << endl;
 
 }
