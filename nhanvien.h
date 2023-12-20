@@ -1,20 +1,18 @@
 // nhanvien.h
 #ifndef NHANVIEN_H
 #define NHANVIEN_H
-
+#include "Person.h"
 #include <iostream>
 #include <fstream>
-
+#include <string>
 using namespace std;
 
 
 
-class NhanVien {
+class NhanVien : public Person {
 private:
     int manv;
-    char ten[30];
-    char chucvu[20];
-    char sdt[12];
+    string chucvu;
     time_t chamcong;
     bool lamviec;
     NhanVien* next;
@@ -29,31 +27,12 @@ public:
         manv = maNV;
     }
 
-    const char* getTen() const {
-        return ten;
-    }
-
-    void setTen(const char* tenNV) {
-        strncpy(ten, tenNV, sizeof(ten) - 1);
-        ten[sizeof(ten) - 1] = '\0';
-    }
-
-    const char* getChucVu() const {
+    const string& getChucVu() const {
         return chucvu;
     }
 
-    void setChucVu(const char* chucVuNV) {
-        strncpy(chucvu, chucVuNV, sizeof(chucvu) - 1);
-        chucvu[sizeof(chucvu) - 1] = '\0';
-    }
-
-    const char* getSDT() const {
-        return sdt;
-    }
-
-    void setSDT(const char* sdtNV) {
-        strncpy(sdt, sdtNV, sizeof(sdt) - 1);
-        sdt[sizeof(sdt) - 1] = '\0';
+    void setChucVu(const string& chucVuNV) {
+        chucvu = chucVuNV;
     }
 
     time_t getChamCong() const {
@@ -80,17 +59,12 @@ public:
         next = nextNV;
     }
 
-    // Các phương thức xử lý khác nếu cần
-};
-
-// Các hàm xử lý với lớp NhanVien
 int optionnv();
 void themnv();
 void luunv();
 void xemdsnv();
 void capnhatlamviec();
 void chamcongvatinhluong();
-void xembangluong();
 void xemluong1nv();
 void xemluong1thang();
 void timnv();
@@ -99,5 +73,5 @@ void optionsuanv();
 void suanvTEN();
 void suanvSDT();
 void suanvCHUCVU();
-
+};
 #endif // NHANVIEN_H

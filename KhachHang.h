@@ -1,29 +1,53 @@
 #ifndef KHACHHANG_H
 #define KHACHHANG_H
+#include "Person.h"
+#include <string>
 
-#pragma once
-
-class KhachHang {
+class KhachHang : public Person {
 private:
-    char ten[40];
-    char sdt[12];
-    char diachi[200];
+    int makh;
+    int loaikh;
+    KhachHang* next;
 
 public:
-    KhachHang(); // Hàm khởi tạo mặc định
-    KhachHang(const char ten[], const char sdt[], const char diachi[]); // Hàm khởi tạo có tham số
+    // Các phương thức getter và setter cho các thuộc tính
+    int getMaKH() const {
+        return makh;
+    }
 
-    // Các hàm thành viên để truy cập thông tin khách hàng
-    const char* getTen() const;
-    const char* getSDT() const;
-    const char* getDiaChi() const;
+    void setMaKH(int maKH) {
+        makh = maKH;
+    }
 
-    // Các hàm thành viên để cập nhật thông tin khách hàng
-    void setTen(const char ten[]);
-    void setSDT(const char sdt[]);
-    void setDiaChi(const char diachi[]);
-    static void optionkh();
+    int getLoaiKH() const {
+        return loaikh;
+    }
+
+    void setLoaiKH(int loaiKH) {
+        loaikh = loaiKH;
+    }
+
+    KhachHang* getNext() const {
+        return next;
+    }
+
+    void setNext(KhachHang* nextKH) {
+        next = nextKH;
+    }
+
+    // Các phương thức xử lý khác nếu cần
+
+
+// Các hàm xử lý với lớp KhachHang
+int optionkh();
+void themkh();
+void luukh();
+void xemdskh();
+void timkh();
+void xoakh();
+void optionsuakh();
+void suakhTEN();
+void suakhSDT();
+void suakhLOAIKH();
 };
-
-
-#endif
+#endif // KHACHHANG_H
