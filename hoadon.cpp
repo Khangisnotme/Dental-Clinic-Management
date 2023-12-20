@@ -1,5 +1,6 @@
 // HoaDon.cpp
 #include "HoaDon.h"
+#include "KhachHang.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -17,7 +18,50 @@ HoaDon::HoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh
     }
 }
 
+void HoaDon::optionhd() {
+    int slsp;
+    int a[100];
+    int b[100];
+    int x = 0;
+    int mssua;
+    while (x != 7) {
+        cout << "-----------------------------------------QUAN LY HOA DON------------------------------------" << endl;
+        cout << "1. Xem MENU" << endl;
+        cout << "2. Them hoa don" << endl;
+        cout << "3. Xem danh sach hoa don" << endl;
+        cout << "4. Tim hoa don" << endl;
+        cout << "5. Xoa hoa don" << endl;
+        cout << "6. Sua hoa don" << endl;
+        cout << "7. Thoat" << endl;
 
+        cout << "Nhap lua chon : ";
+        cin >> x;
+        switch (x) {
+            case 1:
+                HoaDon::menu();
+                break;
+            case 2:
+                nhapHD();
+                break;
+            case 3:
+                cout << "////////////////////////////////// DANH SACH HOA DON //////////////////////////////////" << endl;
+                xemHD();
+                break;
+            case 4:
+                timHD();
+                break;
+            case 5:
+                xoaHD();
+                break;
+            case 6:
+                suaHD(mssua, slsp);
+                break;
+            case 7:
+                cout << "Thoat chuc nang!!!" << endl;
+                break;
+        }
+    }
+}
 void HoaDon::menu() {
     cout << "                                            CA PHE MA CHE                                    " << endl;
     cout << endl;
@@ -71,9 +115,6 @@ void HoaDon::nhapHD(HoaDon* dshd, int& slsp, vector<int> a, vector<int> b) {
     int x;
     int slsp;
     int mahd;
-    char tenkh[40];
-    char dckh[100];
-    char sdtkh[12];
     int masp;
     int sl;
     int tongtien = 0;
@@ -81,13 +122,17 @@ void HoaDon::nhapHD(HoaDon* dshd, int& slsp, vector<int> a, vector<int> b) {
     
     cout << "Nhap ma hoa don: ";
     cin >> mahd;
+ // Tạo một đối tượng KhachHang để lưu thông tin khách hàng
+    KhachHang khachhang;
     cout << "Nhap ten khach hang: ";
     cin.ignore();
-    cin.getline(tenkh, 40);
+    cin.getline(khachHang.ten, 40);
+
     cout << "Nhap sdt khach hang: ";
-    cin.getline(sdtkh, 12);
+    cin.getline(khachHang.sdt, 12);
+
     cout << "Nhap dia chi cua khach hang: ";
-    cin.getline(dckh, 100);
+    cin.getline(khachHang.diachi, 100);
     cout << "So luong loai san pham ma ban muon chon la: ";
     cin >> slsp;
     
@@ -219,13 +264,19 @@ void HoaDon::nhapHD(HoaDon* dshd, int& slsp, vector<int> a, vector<int> b) {
     stringstream ss;
     ss << 1900 + ltm->tm_year << "-" << 1 + ltm->tm_mon << "-" << ltm->tm_mday << " " << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec;
     string thu = ss.str();
-
+    
     themHoaDon(mahd, tenkh, sdtkh, dckh, slsp, a, b, tongtien, thu);
     
     
 }
 void HoaDon::themHoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, vector<int>& a, vector<int>& b, int tongtien, const string& thu); {
-    HoaDon* p = new HoaDon;
+    
+    cout << "Ma hoa don: " << mahd << endl;
+    cout << "Ten khach hang: " << khachHang.ten << endl;
+    cout << "SDT khach hang: " << khachHang.sdt << endl;
+    cout << "Dia chi khach hang: " << khachHang.diachi << endl;
+    
+    HoaDon* p = new HoaDon(mahd, tenkh, sdtkh, dckh, slsp, a, b, tongtien, thu);
     p->mahd = mahd;
     // Copy thông tin khách hàng vào hóa đơn
     strcpy(p->kh.ten, tenkh);
@@ -256,6 +307,49 @@ void HoaDon::themHoaDon(int mahd, const char tenkh[], const char sdtkh[], const 
     luuHoaDon();
 }
 
+void HoaDon::luuHoaDon {
+    ofstream file;
+    file.open("dshd1.txt", ios::app);
+
+    if (!file) {
+        cout << "Khong the mo file!" << endl;
+        return;
+    }
+
+    HoaDon* current = this;  // Sử dụng con trỏ this để truy cập thành viên của lớp
+    while (current != NULL) {
+        bool kiemtra = false;
+        ifstream kiemtrafile("dshd1.txt");
+        string kiemtrastr;
+        while (getline(kiemtrafile, kiemtrastr)) {
+            if (kiemtrastr == "Ma Hoa Don: " + to_string(current->mahd)) {
+                kiemtra = true;
+                break;
+            }
+        }
+        kiemtrafile.close();
+
+        if (!kiemtra) {
+            file << "--------------------------------------------------------" << endl;
+            file << "Ma Hoa Don: " << current->mahd << endl;
+            file << "SDT Khach Hang: " << current->kh.sdt << endl;
+            file << "Ten Khach Hang: " << current->kh.ten << endl;
+            file << "Dia Chi Khach Hang: " << current->kh.diachi << endl;
+            file << setw(30) << left << "Ma san pham " << setw(30) << left << "So luong" << endl;
+
+            for (int i = 0; i < current->slsp; i++) {
+                file << setw(30) << left << current->a[i] << setw(30) << left << current->b[i] << endl;
+            }
+
+            file << "Ngay: " << current->ngay << endl
+                 << "Tong Tien: " << current->tong << endl;
+        }
+        current = current->next;
+    }
+    file.close();
+    luukh();
+    cout << "Da luu hoa don vao file dshd.txt!" << endl;
+}
 void HoaDon::optionxemhd() {
     // Triển khai phương thức optionxemhd ở đây
 }
