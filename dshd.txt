@@ -13,3 +13,14 @@ Ma san pham                   So luong
 31                            94                            
 Ngay: 2023-12-19 9:14:35
 Tong Tien: 128000
+--------------------------------------------------------
+Ma Hoa Don: 612
+SDT Khach Hang: 098215152
+Ten Khach Hang: Khang
+Dia Chi Khach Hang: TpHcm
+Ma san pham                   So luong                      
+11                            -316671904                    
+21                            242                           
+61                            0                             
+Ngay: 2023-12-20 10:44:10
+Tong Tien: 644000

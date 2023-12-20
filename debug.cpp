@@ -115,7 +115,7 @@ void setColor(int color) {
 
 int main()
 {
-
+    system("cls");
 	optionchung();
 
 }
@@ -231,7 +231,7 @@ void optionhd()
 
 void menu()
 {
-    cout << "                                            BTK COFFEE                                    " << endl;
+    cout << "                                            CA PHE MA CHE                                    " << endl;
     cout << endl;
     cout << " ----------------------------------------------  MENU  ----------------------------------------------" << endl;
     cout << setw(20) << left << "MA SP" << setw(60) << left << "            TEN SAN PHAM          " << setw(20) << left << "GIA TIEN (VND)" << endl;
