@@ -1,90 +1,24 @@
-// hoadon.cpp
-#include "hoadon.h"
+// HoaDon.cpp
+#include "HoaDon.h"
 #include <iostream>
 #include <fstream>
-#include <iomanip>
-#include <ctime>
-#include <sstream>
-
 using namespace std;
 
-HoaDon::HoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, int a[], int b[], int tongtien, const string& thu)
+
+// Định nghĩa phương thức khởi tạo
+HoaDon::HoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, vector<int>& a, int b[], int tongtien, const std::string& thu)
     : mahd(mahd), slsp(slsp), tongtien(tongtien), thu(thu) {
-    strcpy(this->tenkh, tenkh);
-    strcpy(this->sdtkh, sdtkh);
-    strcpy(this->dckh, dckh);
+    strcpy(this->kh.ten, tenkh);
+    strcpy(this->kh.sdt, sdtkh);
+    strcpy(this->kh.diachi, dckh);
     for (int i = 0; i < slsp; i++) {
         this->a[i] = a[i];
         this->b[i] = b[i];
     }
 }
-HoaDon() : next(nullptr) {}
-void HoaDon::nhapHoaDon(){
-        cout << "Nhap ma hoa don: ";
-        cin >> mahd;
-
-        cout << "Nhap ten khach hang: ";
-        cin.ignore();
-        cin.getline(kh.ten, 40);
-
-        cout << "Nhap so dien thoai khach hang: ";
-        cin.getline(kh.sdt, 12);
-
-        cout << "Nhap dia chi khach hang: ";
-        cin.getline(kh.diachi, 100);
-
-        cout << "Nhap so luong san pham: ";
-        int slsp;
-        cin >> slsp;
-
-        for (int i = 0; i < slsp; i++) {
-            cout << "Nhap ma san pham " << i + 1 << ": ";
-            cin >> a[i];
-
-            cout << "Nhap so luong san pham " << i + 1 << ": ";
-            cin >> b[i];
-        }
-
-        // Thực hiện các thao tác khác tại đây nếu cần
-
-        // Sau khi nhập, bạn có thể gọi các phương thức khác của lớp HoaDon hoặc lưu thông tin vào file, database, v.v.
-    }
-
-    // Các phương thức khác của lớp HoaDon có thể được định nghĩa ở đây
 
 
-void HoaDon::luuHoaDon() {
-    // Bạn có thể chuyển đoạn mã lưu hoá đơn vào đây
-}
-
-void HoaDon::xemHoaDonTheoGiaTang() {
-    // Bạn có thể chuyển đoạn mã xem hoá đơn theo giá tăng vào đây
-}
-
-void HoaDon::xemHoaDonTheoGiaGiam() {
-    // Bạn có thể chuyển đoạn mã xem hoá đơn theo giá giảm vào đây
-}
-
-void HoaDon::timHoaDon() {
-    // Bạn có thể chuyển đoạn mã tìm hoá đơn vào đây
-}
-
-void HoaDon::optionXemHoaDon() {
-    // Bạn có thể chuyển đoạn mã menu xem hoá đơn vào đây
-}
-
-void HoaDon::xoaHoaDon() {
-    // Bạn có thể chuyển đoạn mã xóa hoá đơn vào đây
-}
-
-void HoaDon::luuKhiSauKhiXoaHoaDon() {
-    // Bạn có thể chuyển đoạn mã lưu khi sau khi xóa hoá đơn vào đây
-}
-
-void HoaDon::suaHoaDonTenKhachHang() {
-    // Bạn có thể chuyển đoạn mã sửa hoá đơn (tên khách hàng) vào đây
-}
- void HoaDon::menu(){
+void HoaDon::menu() {
     cout << "                                            CA PHE MA CHE                                    " << endl;
     cout << endl;
     cout << " ----------------------------------------------  MENU  ----------------------------------------------" << endl;
@@ -132,3 +66,212 @@ void HoaDon::suaHoaDonTenKhachHang() {
 
 }
 
+
+void HoaDon::nhapHD(HoaDon* dshd, int& slsp, vector<int> a, vector<int> b) {
+    int x;
+    int slsp;
+    int mahd;
+    char tenkh[40];
+    char dckh[100];
+    char sdtkh[12];
+    int masp;
+    int sl;
+    int tongtien = 0;
+    int slkho;
+    
+    cout << "Nhap ma hoa don: ";
+    cin >> mahd;
+    cout << "Nhap ten khach hang: ";
+    cin.ignore();
+    cin.getline(tenkh, 40);
+    cout << "Nhap sdt khach hang: ";
+    cin.getline(sdtkh, 12);
+    cout << "Nhap dia chi cua khach hang: ";
+    cin.getline(dckh, 100);
+    cout << "So luong loai san pham ma ban muon chon la: ";
+    cin >> slsp;
+    
+    for (int i = 0; i < slsp; i++) {
+        cout << "Nhap loai san pham thu " << i + 1 << ": ";
+        cin >> masp;
+        a[i] = masp;
+        // Thêm yêu cầu nhập số lượng sau khi nhập mã sản phẩm
+        cout << "Nhap so luong cua loai san pham nay: ";
+        cin >> sl;
+
+
+        ifstream file;
+        file.open("kho.txt");
+        ofstream ghi;
+        ghi.open("temp.txt", ios::app);
+        string line;
+        bool tim = false;
+        while (getline(file, line)) {
+            if (line == "Ma so: " + to_string(masp)) {
+                tim = true;
+            }
+            if (line.find("So luong: ") != string::npos && tim) {
+                string sl_kho = line.substr(10, 2);
+                slkho = stoi(sl_kho);
+                cout << "So luong co trong kho: " << slkho << endl;
+                cin.clear();
+                cout << "Nhap so luong: ";
+                cin >> sl;
+                while (sl > slkho) {
+                    cout << "So luong trong kho khong du! Vui long nhap lai: ";
+                    cin >> sl;
+                }
+                b[i] = sl;
+                ghi << "So luong: " << sl << endl;
+
+            }
+            else
+            {
+                ghi << line << endl;
+            }
+            if (line.find("--------------------------------------------------------") != string::npos && tim)
+            {
+                tim = false;
+            }
+        }
+        file.close();
+        ghi.close();
+        remove("kho.txt");
+        rename("temp.txt","kho.txt");
+
+        switch (masp) {
+        case 11:
+            tongtien += 39000 * sl;
+            break;
+        case 12:
+            tongtien += 35000 * sl;
+            break;
+        case 13:
+            tongtien += 39000 * sl;
+            break;
+        case 14:
+            tongtien += 49000 * sl;
+            break;
+        case 15:
+            tongtien += 49000 * sl;
+            break;
+        case 16:
+            tongtien += 49000 * sl;
+            break;
+        case 21:
+            tongtien += 49000 * sl;
+            break;
+        case 31:
+            tongtien += 79000 * sl;
+            break;
+        case 32:
+            tongtien += 79000 * sl;
+            break;
+        case 33:
+            tongtien += 19000 * sl;
+            break;
+        case 41:
+            tongtien += 19000 * sl;
+            break;
+        case 42:
+            tongtien += 55000 * sl;
+            break;
+        case 43:
+            tongtien += 55000 * sl;
+            break;
+        case 51:
+            tongtien += 55000 * sl;
+            break;
+        case 52:
+            tongtien += 55000 * sl;
+            break;
+        case 53:
+            tongtien += 55000 * sl;
+            break;
+        case 61:
+            tongtien += 29000 * sl;
+            break;
+        case 62:
+            tongtien += 29000 * sl;
+            break;
+        case 63:
+            tongtien += 35000 * sl;
+            break;
+        case 64:
+            tongtien += 35000 * sl;
+            break;
+        case 65:
+            tongtien += 35000 * sl;
+            break;
+        case 66:
+            tongtien += 29000 * sl;
+            break;
+        default:
+            cout << "Lua chon khong hop le!";
+            break;
+        }
+    }
+    
+    cout << "---------------------- Tong hoa don: " << tongtien << "---------------------------" << endl;
+
+    time_t now = time(0);
+    tm* ltm = localtime(&now);
+    stringstream ss;
+    ss << 1900 + ltm->tm_year << "-" << 1 + ltm->tm_mon << "-" << ltm->tm_mday << " " << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec;
+    string thu = ss.str();
+
+    themHoaDon(mahd, tenkh, sdtkh, dckh, slsp, a, b, tongtien, thu);
+    
+    
+}
+void HoaDon::themHoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, vector<int>& a, vector<int>& b, int tongtien, const string& thu); {
+    HoaDon* p = new HoaDon;
+    p->mahd = mahd;
+    // Copy thông tin khách hàng vào hóa đơn
+    strcpy(p->kh.ten, tenkh);
+    strcpy(p->kh.sdt, sdtkh);
+    strcpy(p->kh.diachi, dckh);
+    p->tong = tongtien;
+    strcpy(p->ngay, thu.c_str());
+    p->sp.sl = slsp;
+    for (int i = 0; i < slsp; i++) {
+        p->sp.masp = a[i];
+        p->a[i] = p->sp.masp;
+        p->sp.sl = b[i];
+        p->b[i] = p->sp.sl;
+    }
+    p->next = NULL;
+
+    if (next == NULL) {
+        next = p; // Cập nhật con trỏ next để trỏ tới nút đầu tiên
+    }
+    else {
+        HoaDon* q = this;
+        while (q->next != NULL) {
+            q = q->next;
+        }
+        q->next = p;
+    }
+
+    luuHoaDon();
+}
+
+void HoaDon::optionxemhd() {
+    // Triển khai phương thức optionxemhd ở đây
+}
+
+void HoaDon::timhd() {
+    // Triển khai phương thức timhd ở đây
+}
+
+void HoaDon::xoahd() {
+    // Triển khai phương thức xoahd ở đây
+}
+
+void HoaDon::optionsuahd(HoaDon* dshd, int mssua, int slsp) {
+    // Triển khai phương thức optionsuahd ở đây
+}
+
+void HoaDon::optionhd() {
+    // Triển khai phương thức optionhd ở đây
+}

@@ -1,50 +1,41 @@
-// hoadon.h
 #ifndef HOADON_H
 #define HOADON_H
-
+#pragma once
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <iomanip>
-#include "Node.h"
-#include "khach.h"
-#include "sanpham.h"
+#include <ctime>
+#include <sstream>
+#include "KhachHang.h"
+#include "SanPham.h"
 using namespace std;
-
 class HoaDon {
-    private:
-        Node* head;
-        int mahd;
-        time_t tgian;
-        KhachHang kh;
-        SanPham sp;
-        int a[100];
-        int b[100];
-        int tong;
-        char ngay[200];
-        HoaDon* next;
+private:
+    int masp;
+    int sl;
+    int slsp;
+    
+    int tongtien;
 
-    public:
-    // Các phương thức
+    int mahd;
+    time_t tgian;
+    KhachHang kh;
+    SanPham sp;
+    vector<int> a;
+    vector<int> b;
+    int tong;
+    string ngay;
+    HoaDon* next;
 
-        HoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, int a[], int b[], int tongtien, const string& thu);
-    
-        void nhapHoaDon();
-    
-        void luuHoaDon();
-    
-        static void timHoaDon();
-    
-        static void optionXemHoaDon();
-    
-        static void xoaHoaDon();
-    
-        static void luuKhiSauKhiXoaHoaDon();
-    
-        void suaHoaDonTenKhachHang();
-    
-
-
-    // Thêm các phương thức sửa thông tin khác nếu cần
+public:
+    HoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, vector<int>& a,vector<int>& b, int tongtien, const string& thu);
+    void menu();
+    void optionhd();
+    void nhapHD();
+    void luuhd();
+    void themHoaDon(int mahd, const char tenkh[], const char sdtkh[], const char dckh[], int slsp, vector<int>& a, vector<int>& b, int tongtien, const string& thu);
 };
 
-#endif // HOADON_H
+
+#endif
